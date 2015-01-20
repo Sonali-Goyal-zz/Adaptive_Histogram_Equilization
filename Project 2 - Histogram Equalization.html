@@ -1,0 +1,1362 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html><head>
+
+
+
+  <title>Project 2 - Histogram Equalization</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <style type="text/css">
+  #g_title p, #g_footer p, #g_description p {
+    margin: 0;
+  }
+  /*
+
+  	-- -- -- -- -- -- --
+  	Browser Fixes
+  	-- -- -- -- -- -- --
+  	
+  	This file uses CSS filtering methods to fix various
+  	layout bugs.
+
+  	Each of the following three imported files is a 
+  	separate, browser-specific CSS file that keeps all 
+  	hacks out of the main style sheet.
+  	
+  	Over time, as supporting these browsers no longer
+  	remains a priority, cleaning up the hacks is as
+  	easy as deleting the @import statement below, or
+  	simply no longer linking this file from the HTML.
+  	
+  */
+
+  /* 
+    fix ie6 "peekaboo bug" using the "holly hack". 
+    Note, this style only gets applied to ie6
+  */
+  * html .wrapper {
+    height: 0.1%;
+  }
+
+  /* 
+   * IE5 mac - overrides the IE/Win hack 
+   */
+
+  /*\*//*/
+
+  * html #threecolumn div {
+  	height: auto;
+  }
+
+  /**/
+
+
+  /* 
+   * IE5/Win-specific CSS -ensures #container wraps all content on window resize
+   */
+
+  @media tty {
+   i{content:"\";/*" "*/}} * html #container { height: 1%; } /*";}
+  }/* */
+  /* Styling for editable elements. Eventually, this will be part of the style. */
+  .editable {
+    border: 1px dashed blue;
+  }
+  
+  #footer {
+    clear: both;
+  }
+  
+  /* Extra divs hidden by default. The custom CSS can override this though */
+  #extraDiv1, #extraDiv2, #extraDiv3, #extraDiv4, #extraDiv5, #extraDiv6 {
+    display: none;
+  }
+  
+  a img,:link img,:visited img {border: none;}
+
+
+  body {
+    text-align: center;
+  }
+  #container {
+    width: 718px;
+    text-align: left;
+    margin: 0 auto;
+  }
+  /** BEGIN CUSTOM SKIN **/
+  /*
+
+  	-- -- -- -- -- -- --
+  	Base CSS
+  	-- -- -- -- -- -- --
+  	
+  	This file simply removes default styling on most HTML elements in 
+  	order to reduce the need to later override them.
+  	
+  */
+
+  h1,h2,h3,h4,h5,h6,pre,code,p {font-size: 1em;}
+  dl,li,dt,dd,h1,h2,h3,h4,h5,h6,pre,form,body,html,p,blockquote,fieldset,input {margin: 0; padding: 0;}
+  a img,:link img,:visited img {border: none;}
+  address {font-style: normal;}/*
+
+  	-- -- -- -- -- -- --
+  	Type Scheme: Deco
+  	-- -- -- -- -- -- --
+  	
+  */
+
+  body {
+  	font: 76% Verdana, sans-serif;
+  }	
+
+  h1, h2, h3, h4, h5, h6, p.description {
+  	font-family: "Trebuchet MS", Trebuchet, sans-serif;
+  }
+  h1 {
+  	font-size: 3em;
+  	font-weight: bold;
+  	letter-spacing: 2px;
+  }
+  h2 {
+  	font-size: 2em;
+  	font-weight: normal;
+  }
+  h3 {
+  	font-size: 1.5em;
+  }
+  h4 {
+  	font-size: 1.2em;
+  	letter-spacing: 0.2em;
+  }
+  h5 {
+  	font-size: 1.2em;
+  }
+  h6 {
+  	font-size: 1em;
+  	font-weight: bold;
+  }
+
+  p, td {
+  	line-height: 1.8em;
+  }
+  code, kbd {
+  	font-size: 1.25em;
+  }/*
+
+  	-- -- -- -- -- -- --
+  	STYLE: Lagoona
+  	-- -- -- -- -- -- --
+
+
+  	Each of the following three files is a separate,
+  	browser-specific CSS file that keeps all hacks
+  	out of the main style sheet.
+
+  	Over time, as supporting these browsers no longer
+  	remains a priority, cleaning up the hacks is as
+  	easy as deleting the @import statement.
+
+  */
+
+
+
+  /* ie6win */
+
+  /* fixes a repeating character bug in the sidebar column  - hide for IE Mac \*/ 
+
+  * html #sidebar a { 
+
+      height: 1px; 
+
+  } 
+
+  /*  */ 
+
+
+
+  /* fixes the bad support of the boxmodel - hide for IE Mac \*/ 
+
+  * html #twocolumn-left #main-content,
+
+  * html #twocolumn-right #main-content {
+
+  	width: 475px;
+
+  }
+
+  /*  */ 
+
+  /* fixes the double margin bug - hide for IE Mac \*/ 
+
+  * html #twocolumn-liquid-left #sidebar {
+
+  	margin-left: 1em;
+
+  }
+
+  /* ie5win */
+  @media tty { i{content:"\";/*" "*/}} * html td, * html th, * html caption  { font-size: 76%; } * html #main-content .wrapper { padding: 0 1.2em; } * html #threecolumn #main-content { width: 428px; } /*";}
+  }/* */
+
+
+
+
+
+  /* Basic HTML style
+
+  ----------------------------------------------- */
+
+  a:link {
+  	margin: -1px;
+  	padding: 1px;
+  }
+
+  a:visited {
+  	color: #eeeeee;
+  }
+
+  body {
+
+  	font: 76% Helvetica, Arial, Verdana, sans-serif;
+
+  	margin: 0;
+
+  	padding: 0;
+
+  }
+
+  blockquote {
+
+  	margin: 1em 0;
+
+  	font-style: italic;
+
+  }
+
+  caption {
+
+  	font-weight: bold;
+
+  	width: inherit;
+
+  	padding: 0.3em 1em;
+
+  	border-bottom: 1px solid;
+
+  }
+
+  dd {
+
+  	margin: 1em 0;
+
+  	padding: 3px;
+
+  	border-left: 5px solid;
+
+  }
+
+  dt {
+
+  	font-weight: bold;
+
+  }
+
+  hr {
+
+  	margin: 1em 0;
+
+  	border-style: none;
+
+  	height: 1px;
+
+  }
+
+  li {
+
+  	margin: 1em 0;
+
+  }
+
+  td {
+
+  	vertical-align: top;
+
+  	padding: 0.5em;
+
+  	border-bottom: 1px solid;
+
+  }
+
+  td p {
+
+  	margin-top: 0;
+
+  	line-height: 1.3em;
+
+  }
+  p, td {
+   line-height: 1.3em;
+  }
+
+  th {
+
+  	text-align: left;
+
+  	border-bottom: 1px solid;
+
+  	padding: 0.5em;
+
+  }
+
+
+
+
+
+  /* Custom font definitions for Lagoona style
+
+  ----------------------------------------------- */
+
+  p {
+
+  	margin: 1em 0;
+  	line-height: 1.5;
+
+  }
+
+  p.description {
+
+  	margin: 0;
+
+  	line-height: 1.5;
+
+  	font-style: normal;
+
+  	font-size: 1.2em;
+
+  }
+
+  h1 {
+
+  	font-size: 3em;
+
+  }
+
+  h2 {
+
+  	margin: 5px 0 5px 0;
+
+  	padding-left: 17px;
+
+  	font-size: 2em;
+
+  	font-weight: normal;
+
+  }
+
+  h3 {
+
+  	padding: 0 5px 0 17px;
+
+  	border-bottom: 1px dotted;
+
+  	font-size: 1.6em;
+
+  	font-weight: normal;
+
+  }
+
+  h4 {
+
+  	font-size: 1.2em;
+
+  }
+
+  h5 {
+
+  	font-size: 1.2em;
+
+  	padding: 3px 0 3px 15px;
+
+  	border-top: 1px dotted;
+
+  	border-bottom: 1px dotted;	
+
+  }
+
+  h6 {
+
+  	font-size: 1em;
+
+  	padding-bottom: 3px;
+
+  	border-top: 1px dotted;
+
+  	border-bottom: 1px dotted;
+
+  }
+
+  .editable {
+
+  	border: #f00 dashed 1px;
+
+  	position: relative;
+
+  }
+
+
+
+  /* layout patches
+
+  ----------------------------------------------- */
+
+  #twocolumn-liquid-left #sidebar {
+
+  	float: left;
+
+  }
+
+  #twocolumn-liquid-right #sidebar {
+
+  	float: right;
+
+  }
+
+  #threecolumn #sidebar-alternate {
+
+  	float: right;
+
+  }
+
+
+
+
+
+  /* Header style
+
+  ----------------------------------------------- */
+
+  #header {
+
+  	margin-bottom: 10px;
+  }
+
+
+  /* The following are to get the header area to be at least 123px so that
+     the body text doesn't begin where the header background is.  Just setting
+     the height to 123px breaks for most browsers, since it puts the body and
+     sidebars on TOP of the header when the header is more than 123px.  Using
+     min-height is what we want, but it breaks in the page editor. So we get 
+     creative here ... */
+
+  /* ie6win - hide for IE Mac \*/ 
+  /* ie deosn't have min-height, but it uses height as if it were min-height */ 
+
+  * html #header { 
+  	height: 123px; 
+
+  } 
+
+  /* Safari/Opera/Firefox - we set the padding of the header to the min height we want. 
+                            This forces it to be at least 123px */
+  *>#header {
+  	padding-top: 123px;
+  }
+
+  /* Safari/Opera/Firefox - then we pull the contents up to where we want them */
+  *>#header .wrapper {
+  	margin-top: -123px;
+
+  }
+
+
+  #header .wrapper {
+
+  	padding: 2em;
+
+  }
+
+  #threecolumn #header .wrapper {
+
+  	padding: 2em 0;
+
+  }
+
+  #twocolumn-left #header .wrapper {
+
+  	padding: 2em 2em 2em 0;
+
+  }
+
+  #twocolumn-right #header .wrapper {
+
+  	padding: 2em 0 2em 2em;
+
+  }
+
+
+
+
+
+  /* Content column tweaks
+
+  ----------------------------------------------- */
+
+  #main-content .wrapper {
+
+  	padding: 0 2em;
+
+  }
+
+  #main-content blockquote {
+
+  	margin: 1em;
+
+  }
+
+
+
+  /* Sidebar style
+
+  ----------------------------------------------- */
+
+
+
+  #sidebar {
+
+  	margin: 1em 0 0 0;
+
+  }
+
+  #sidebar .links .wrapper {
+
+  	margin-top: 1em;
+
+  	padding: 1px 0;
+
+  }
+
+  #sidebar .links ul {
+
+  	margin-top: 1px;
+
+  	padding: 0.7em 0 0 1em;
+
+  }
+
+  #sidebar .links .wrapper ul li {
+
+  	background: none;
+
+  	padding: 0 0 0.5em 0;
+
+  	margin: 0;
+
+  }
+
+  #sidebar li a:link, #sidebar li a:visited {
+
+  	background: none;
+
+  	font-weight: normal;
+  }
+
+  #sidebar h3 {
+
+  	left: 0;
+
+  	line-height: 1;
+
+  	margin: 0.5em 0;
+
+  	padding-left: 10px;
+
+  	background: none;
+
+  	border-left: 5px solid;
+
+  	border-bottom: none;
+
+  }
+
+  #sidebar h4 {
+
+  	padding: 5px 5px 5px 0;
+
+  	border-bottom: 1px dotted;
+
+  	border-top: 1px dotted;
+
+  }
+
+  #sidebar h6 {
+
+  	padding: 3px 0 3px 0px;
+
+  	margin: 1em 0;
+
+  	background: none;
+
+  	border-top: 1px dotted;
+
+  	border-bottom: 1px dotted;
+
+  }
+
+  #sidebar p {
+
+  	line-height: 1.2em;
+
+  	font-size: 90%;
+
+  	padding: 0 0 0.3em 1em;
+
+  	margin: 0.3em 0 0.7em 0;
+
+  }
+
+  #adsense {
+
+  	margin: 3em 2em;
+
+  	text-align: center;
+
+  }
+
+
+
+
+
+  /* Footer style
+
+  ----------------------------------------------- */
+
+
+
+  #footer {
+
+  	padding-top: 0.5em;
+
+  	margin: 1em 0;
+
+  }
+
+  #footer .wrapper {
+
+  	margin: 1em 0;
+
+  	padding-top: 1em;
+
+  	font-size: 0.8em;
+
+  	clear: both;
+
+  }
+
+  #footer hr {
+
+  	display: none;
+
+  }
+
+
+
+  /* Tweaks for Three-column layout
+
+  ----------------------------------------------- */
+
+
+
+  #sidebar-alternate p {
+
+  	line-height: 1.4 em;
+
+  	font-size: 92%;
+
+  	margin: 0.5em 1em;
+
+  }
+
+  #sidebar-alternate blockquote {
+
+  	margin: 0.5em 0;
+
+  }
+
+  #sidebar-alternate  {
+
+  	margin-top: 2em;
+
+  	padding-top: 10px;
+
+  }
+
+  #sidebar-alternate .wrapper {
+
+  	padding: 1px 0 10px 0;
+
+  }
+
+  .alternate-content h3 {
+
+  	padding: 0 0 0 17px;
+
+  	margin: 5px;
+
+  }
+
+  #sidebar-alternate h3 {
+
+  	left: 0;
+
+  	line-height: 1;
+
+  	margin: 0.5em 0 0.3em 0;
+
+  	padding: 0 5px 3px 22px;
+
+  	background-position: 5px 5px;
+
+  	border-bottom: none;
+
+  }
+
+  #sidebar-alternate h4 {
+
+  	padding: 5px 5px 5px 10px;
+
+  	border-bottom: 1px dotted;
+
+  	border-top: 1px dotted;
+
+  }
+
+  #sidebar-alternate h5, #sidebar h5 {
+
+  	padding: 3px 0 3px 15px;
+
+  	margin: 0px;
+
+  	border-top: 1px dotted;
+
+  	border-bottom: 1px dotted;
+
+  }
+
+  #sidebar-alternate h6 {
+
+  	padding: 3px 0 3px 10px;
+
+  	margin: 0.3em 0;
+
+  	background: none;
+
+  	border-top: 1px dotted;
+
+  	border-bottom: 1px dotted;
+
+  }
+
+  #alternate-content p {
+
+  	padding: 10px;
+
+  }
+
+  #alternate-content blockquote {
+
+  	padding: 0;
+
+  	margin: 0;
+
+  }
+
+  #threecolumn #adsense {
+
+  	margin: 3em 0 3em 0;
+
+  	text-align: left;
+
+  }
+
+  #sidebar-alternate ul li, #sidebar ul li {
+
+  	margin: 0 0.2em 0 0;
+
+  }
+
+  #sidebar-alternate ol li, #sidebar ol li {
+
+  	margin: 0 0.2em 0 0;
+
+  }
+
+  #sidebar-alternate ul, #sidebar ul, #sidebar-alternate ol, #sidebar ol  {
+
+  	padding: 0 0 0 12px;
+
+  	margin: 0 1em;
+
+  }
+
+  /* Tweaks for One-column layout 
+
+  ----------------------------------------------- */
+
+
+
+  #onecolumn #footer {
+
+  	padding: 0 2em;
+
+  }
+
+  /* Tweaks for Two-column Left layout 
+
+  ----------------------------------------------- */
+
+
+
+  #twocolumn-left #footer {
+
+  	margin: 1em 2em 1em 0;
+
+  	padding-bottom: 1px;
+
+  }
+
+  /* Tweaks for Two-column Right layout 
+
+  ----------------------------------------------- */
+
+
+
+  #twocolumn-right #footer {
+
+  	margin: 1em 0;
+
+  	padding: 0.5em 0 1px 2em;
+
+  }
+
+
+
+  /* Tweaks for Two-column Left Liquid layout 
+
+  ----------------------------------------------- */
+
+
+
+  #twocolumn-liquid-left #footer {
+
+  	margin: 1em 2em;
+
+  	padding-bottom: 1px;
+
+  }
+
+  #twocolumn-liquid-left #sidebar {
+
+  	margin-left: 2em;
+
+  }
+
+
+
+  /* Tweaks for Two-column Right Liquid layout 
+
+  ----------------------------------------------- */
+
+
+
+  #twocolumn-liquid-right #footer {
+
+  	margin-left: 2em;
+
+  	padding-bottom: 1px;
+
+  }
+
+  #twocolumn-liquid-right #container {
+
+  	padding-right: 2em;
+
+  }
+
+  #twocolumn-liquid-right #header .wrapper {
+
+  	padding: 2em 0 2em 2em;
+
+  }
+  /* Basic HTML style
+
+  ----------------------------------------------- */
+
+
+
+  a:link {
+
+  	color: #FFFFFF;
+
+  	background: #8b8980;
+
+  	border-bottom-color: #e2f9ff;
+
+  }
+
+
+
+  a:visited {
+
+  	color: #FFFFFF;
+
+  	background: #5c6668;
+
+  	border-bottom-color: #e2f9ff;
+
+  }
+
+
+
+  a:hover, a:active {
+
+  	background: #a9a698;
+
+  	border-bottom-color: #e2f9ff;
+
+  }
+
+
+
+  body {
+
+  	color: #cedbdf;
+
+  	background: #575b65 url(/-/includes/style/lagoona/beach/body-bg.gif) repeat-x;
+
+  }
+
+
+
+  blockquote {
+
+  	color: #a5b7cc;
+
+  }
+
+
+
+  caption {
+
+  	color: #f8f4ea;
+
+  	background: #8b887f;
+
+  	border-bottom-color: #575b65;
+
+  }
+
+
+
+  dd {
+
+  	background: #606571;
+
+  	color: #ccdce8;
+
+  	border-left-color: #81909f;
+
+  }
+
+
+
+  hr {
+
+  	color: #ccdce8;
+
+  	background: #676c76;
+
+  	border-color: #8a9cb0;
+
+  }
+
+
+
+  td {
+
+  	border-bottom-color: #575b65;
+
+  	background-color: #606571;
+
+  }
+
+
+
+  th {
+
+  	color: #fbf8f1;
+
+  	background: #b0a78c;
+
+  	border-bottom-color: #575b65;
+
+  }
+
+
+
+  /* Custom font definitions for Lagoona style
+
+  ----------------------------------------------- */
+
+
+
+  p.description {
+
+  	color: #937a63;
+
+  }
+
+
+
+  h2 {
+
+  	color: #ccdce8;
+
+  	background: url(/-/includes/style/lagoona/beach/h2-bg.gif) no-repeat left center;
+
+  }
+
+
+
+  h3 {
+
+  	color: #e2dac2;
+
+  	background: url(/-/includes/style/lagoona/beach/h3-bg.gif) no-repeat 0 0.2em;
+
+  	border-bottom-color: #b2b098;
+
+  }
+
+
+
+  h4 {
+
+  	color: #a9eaff;
+
+  }
+
+
+
+  h5 {
+
+  	color: #e2dac2;
+
+  	background: url(/-/includes/style/lagoona/beach/h5-bg.gif) no-repeat 5px 10px;
+
+  	border-top-color: #899f90;
+
+  	border-bottom-color: #899f90;
+
+  }
+
+
+
+  h6 {
+
+  	color: #B0DAE9;
+
+  	border-top-color: #6d849d;
+
+  	border-bottom-color: #6d849d;
+
+  }
+
+
+
+  /* Header style
+
+  ----------------------------------------------- */
+
+
+
+  #header {
+
+  	color: #937a63;
+
+  	background: transparent url(/-/includes/style/lagoona/beach/header.gif) no-repeat;
+
+  }
+
+
+
+  /* Sidebar style
+
+  ----------------------------------------------- */
+
+
+
+  #sidebar .links ul {
+
+  	color: #f6f3eb;
+
+  }
+
+
+
+  #sidebar .links ul li {
+
+  	background: none;
+
+  }
+
+
+
+  #sidebar li a:link, #sidebar li a:visited {
+
+  	color: #ccdce8;
+
+  	border-bottom-color: #929aaa;
+
+  }
+
+
+
+  #sidebar li a:hover {
+
+  	background: #757d8b;
+
+  	border-bottom-color: #929aaa;
+
+  }
+
+
+
+  #sidebar h3 {
+
+  	color: #f6f3eb;
+
+  	border-left-color: #ee7169;
+
+  }
+
+
+
+  #sidebar h4 {
+
+  	border-bottom-color: #8ea4b5;
+
+  	border-top-color: #8ea4b5;
+
+  	color: #8ea4b5;
+
+  }
+
+
+
+  #sidebar p {
+
+  	color: #c0b8a2;
+
+  }
+
+
+
+  /* Footer style
+
+  ----------------------------------------------- */
+
+
+
+  #footer .wrapper {
+
+  	color: #c1d0df;
+
+  	background: transparent url(/-/includes/style/lagoona/beach/footer-bg.gif) repeat-x;
+
+  }
+
+
+
+  /* Tweaks for Three-column layout
+
+  ----------------------------------------------- */
+
+
+
+  #sidebar-alternate {
+
+  	background: #656972 url(/-/includes/style/lagoona/beach/3c-alt-top.gif) no-repeat left top;
+
+  }
+
+
+
+  #sidebar-alternate .wrapper {
+
+  	color: #c0b8a2;
+
+  	background: #656972 url(/-/includes/style/lagoona/beach/3c-alt-bottom.gif) no-repeat left bottom;
+
+  }
+
+
+
+  #sidebar-alternate .wrapper .wrapper {
+
+  	background: #656972;
+
+  }
+
+
+
+  #sidebar-alternate h3 {
+
+  	color: #a2c3df;
+
+  }
+
+
+
+  #sidebar-alternate h4 {
+
+  	border-bottom-color: #b0b6c2;
+
+  	border-top-color: #b0b6c2;
+
+  	color: #99bfde;
+
+  	background: url(/-/includes/style/lagoona/beach/h4-alt-bg.gif) repeat-y;
+
+  }
+
+
+
+  #sidebar-alternate h5, #sidebar h5 {
+
+  	background: #595f6d url(/-/includes/style/lagoona/beach/h5-bg.gif) no-repeat 5px 10px;
+
+  	border-top-color: #899f90;
+
+  	border-bottom-color: #899f90;
+
+  }
+
+
+
+  #sidebar-alternate h5 {
+
+  	border-left-color: #899f90;
+
+  	border-right-color: #899f90;
+
+  }
+
+
+
+  #alternate-content blockquote {
+
+  	color: #cadfef;
+
+  }
+
+
+
+  #sidebar-alternate ul li, #sidebar ul li {
+
+  	color: #b7ccdf;
+
+  }
+
+
+
+  #sidebar-alternate ol li, #sidebar ol li {
+
+  	color: #b7ccdf;
+
+  }
+
+  /** END CUSTOM SKIN **/
+  </style>
+
+  <!-- Hack to avoid flash of unstyled content in IE -->
+  <script> </script>
+</head><body id="onecolumn">
+  <div id="container">
+    <div class="wrapper">
+      <div id="header">
+        <div class="wrapper">
+          <h1 id="page-title"><div id="g_title">Project 2 - Histogram Equalization </div></h1>
+          <div style="clear: both;"></div>
+          <p class="description"></p><div id="g_description"><p>sshankar[at]cs[dot]utah[dot]edu</p></div>
+          <div style="clear: both;"></div>
+        </div>
+      </div>
+      <!-- /editable --><!-- /wrapper --><!-- /header -->
+      <div id="main-content">
+        
+        <div class="wrapper">
+          <div class="content-item"><div id="g_body"><p><font size="4"><i>1. </i><i>histogram(I, n, min, max) </i></font></p><p>The
+program takes in an input image, the number of bins, and a min and a
+max value. The range (min - max + 1) is equally divided by the number
+of bins and rounded of to the nearest integer using the <i>ceil</i>
+function. The pixel intensity values in the range are allocated to the
+respective bins and then divided by the total number of pixels in the
+bins, to get the relative frequency in every bin.</p><p>To execute the program, run the following,</p><p>./histogram_2 &lt;path to image&gt; &lt;bins required&gt; &lt;min&gt; &lt;max&gt;</p><p>The program outputs the relative frequency of intensity values in each bin.</p><p>&nbsp;The code for the program can be found here, <a href="./code/histogram/histogram.cxx">./code/histogram/histogram.cxx</a>. <br></p><p><font size="4"><i>2. </i><i>histoeq(I, n, min, max)</i></font></p><p>As with <i>histogram</i>,
+this program too takes in the same parameters and outputs an image with
+histogram equalization performed on it. This function first calls the
+function <i>histogram</i> to create the pdf's/ relative frequency for every bin. The function <i>histoeq </i>then
+uses these pdf values to calculate the cdf for an intensity value and
+maps it to an intensity value between the input min and max.</p><p>To execute the program, run the following,</p><p>./histoeq &lt;path to image&gt; &lt;bins required&gt; &lt;min&gt; &lt;max&gt; 1</p><p>Here <b><i>'1'</i></b>
+is necessary parameter, as that ensures that the overloaded form of the
+program which performs blending operate in the same space. Check below
+too see how blending works.<br></p><p>The program outputs an image <i>image_out.fits&nbsp; </i>with histogram equalization performed on it.</p><p>The code for the program can be found here, <a href="./code/histoeq/histoeq.cxx">./code/histoeq/histoeq.cxx</a>. <br></p><p><font size="4"><i>3 &amp; 4. </i><i>Results (enhancement of the given images)</i></font></p><p>All the images below were generated using the following parameters,</p><p style="text-align: center;"><b><i>n: 256, min: 0, max: 255</i></b></p><p><i>a. Crowd</i></p><p style="text-align: center; clear: both;" class="separator"><a style="border: 0pt none ; background-color: transparent; margin-left: 1em; margin-right: 1em;" href="./images/crowd_he.png" imageanchor="1"><img src="./images/crowd_he.png" style="border: 0pt none ;" width="420" height="315"></a></p><p style="text-align: center;">(Click on the image for the original size)<br></p><p style="text-align: left;"><i>b. University</i></p><p style="text-align: center; clear: both;" class="separator"><a style="border: 0pt none ; background-color: transparent; margin-left: 1em; margin-right: 1em;" href="./images/university_he.png" imageanchor="1"><img src="./images/university_he.png" style="border: 0pt none ;" width="399" height="300"></a></p><p style="text-align: left;"><i>c.&nbsp; People</i></p><p style="text-align: center; clear: both;" class="separator"><a style="border: 0pt none ; background-color: transparent; margin-left: 1em; margin-right: 1em;" href="./images/chang_he.png" imageanchor="1"><img src="./images/chang_he.png" style="border: 0pt none ;" width="512" height="512"></a></p><p><i>d. Portal</i></p><p style="text-align: center; clear: both;" class="separator"><a style="border: 0pt none ; background-color: transparent; margin-left: 1em; margin-right: 1em;" href="./images/portal_he.png" imageanchor="1"><img src="./images/portal_he.png" style="border: 0pt none ;" width="252" height="354"></a></p><p><i>e. Phobos (Mars moon)</i><br></p><p style="text-align: center; clear: both;" class="separator"><a style="border: 0pt none ; background-color: transparent; margin-left: 1em; margin-right: 1em;" href="./images/mars.png" imageanchor="1"><img src="./images/mars.png" style="border: 0pt none ;" width="342" height="500"></a></p><p style="text-align: center;">Original image<br></p><p style="text-align: center; clear: both;" class="separator"><a style="border: 0pt none ; background-color: transparent; margin-left: 1em; margin-right: 1em;" href="./images/mars_he.png" imageanchor="1"><img src="./images/mars_he.png" style="border: 0pt none ;" width="342" height="500"></a></p><p style="text-align: center;">Enhanced image<br></p><p><i>f. Aerial shot</i></p><p style="text-align: center; clear: both;" class="separator"><a style="border: 0pt none ; background-color: transparent; margin-left: 1em; margin-right: 1em;" href="./images/aerial.png" imageanchor="1"><img src="./images/aerial.png" style="border: 0pt none ;" width="383" height="385"></a></p><p style="text-align: center;">Original image</p><p style="text-align: center; clear: both;" class="separator"><a style="border: 0pt none ; background-color: transparent; margin-left: 1em; margin-right: 1em;" href="./images/aerial_he.png" imageanchor="1"><img src="./images/aerial_he.png" style="border: 0pt none ;" width="383" height="385"></a></p><p style="text-align: center;">Enhanced image</p><p style="text-align: left;"><font size="4"><i>5. Histograms</i></font></p><p style="text-align: left;"><i>a. Crowd</i></p><p style="text-align: center; clear: both;" class="separator"><a style="border: 0pt none ; background-color: transparent; margin-left: 1em; margin-right: 1em;" href="./images/crowd_hist.png" imageanchor="1"><img src="./images/crowd_hist.png" style="border: 0pt none ;" width="560" height="420"></a></p><p style="text-align: center;">Before</p><p style="text-align: center; clear: both;" class="separator"><a style="border: 0pt none ; background-color: transparent; margin-left: 1em; margin-right: 1em;" href="./images/crowd_he_hist.png" imageanchor="1"><img src="./images/crowd_he_hist.png" style="border: 0pt none ;" width="560" height="420"></a></p><p style="text-align: center;">After</p><p style="text-align: left;"><i>b. University</i></p><p style="text-align: center; clear: both;" class="separator"><a style="border: 0pt none ; background-color: transparent; margin-left: 1em; margin-right: 1em;" href="./images/university_hist.png" imageanchor="1"><img src="./images/university_hist.png" style="border: 0pt none ;" width="560" height="420"></a></p><p style="text-align: center;">Before</p><p style="text-align: center; clear: both;" class="separator"><a style="border: 0pt none ; background-color: transparent; margin-left: 1em; margin-right: 1em;" href="./images/university_he_hist.png" imageanchor="1"><img src="./images/university_he_hist.png" style="border: 0pt none ;" width="560" height="420"></a></p><p style="text-align: center;">After</p><p style="text-align: left;"><i>c. People</i></p><p style="text-align: center; clear: both;" class="separator"><a style="border: 0pt none ; background-color: transparent; margin-left: 1em; margin-right: 1em;" href="./images/chang_hist.png" imageanchor="1"><img src="./images/chang_hist.png" style="border: 0pt none ;" width="560" height="420"></a></p><p style="text-align: center;">Before</p><p style="text-align: center; clear: both;" class="separator"><a style="border: 0pt none ; background-color: transparent; margin-left: 1em; margin-right: 1em;" href="./images/chang_he_hist.png" imageanchor="1"><img src="./images/chang_he_hist.png" style="border: 0pt none ;" width="560" height="420"></a></p><p style="text-align: center;">After</p><p style="text-align: left;"><i>d. Portal</i></p><p style="text-align: center; clear: both;" class="separator"><a style="border: 0pt none ; background-color: transparent; margin-left: 1em; margin-right: 1em;" href="./images/portal_hist.png" imageanchor="1"><img src="./images/portal_hist.png" style="border: 0pt none ;" width="560" height="420"></a></p><p style="text-align: center;">&nbsp;Before</p><p style="text-align: center; clear: both;" class="separator"><a style="border: 0pt none ; background-color: transparent; margin-left: 1em; margin-right: 1em;" href="./images/portal_he_hist.png" imageanchor="1"><img src="./images/portal_he_hist.png" style="border: 0pt none ;" width="560" height="420"></a></p><p style="text-align: center;">After<br></p><p style="text-align: left;"><i>e. Phobos</i></p><p style="text-align: center; clear: both;" class="separator"><a style="border: 0pt none ; background-color: transparent; margin-left: 1em; margin-right: 1em;" href="./images/mars_hist.png" imageanchor="1"><img src="./images/mars_hist.png" style="border: 0pt none ;" width="560" height="420"></a></p><p style="text-align: center;">Before</p><p style="text-align: center; clear: both;" class="separator"><a style="border: 0pt none ; background-color: transparent; margin-left: 1em; margin-right: 1em;" href="./images/mars_he_hist.png" imageanchor="1"><img src="./images/mars_he_hist.png" style="border: 0pt none ;" width="560" height="420"></a></p><p style="text-align: center;">After</p><p style="text-align: left;"><i>f. Aerial</i></p><p style="text-align: center; clear: both;" class="separator"><a style="border: 0pt none ; background-color: transparent; margin-left: 1em; margin-right: 1em;" href="./images/aerial_hist.png" imageanchor="1"><img src="./images/aerial_hist.png" style="border: 0pt none ;" width="560" height="420"></a></p><p style="text-align: center;">Before</p><p style="text-align: center; clear: both;" class="separator"><a style="border: 0pt none ; background-color: transparent; margin-left: 1em; margin-right: 1em;" href="./images/aerial_he_hist.png" imageanchor="1"><img src="./images/aerial_he_hist.png" style="border: 0pt none ;" width="560" height="420"></a></p><p style="text-align: center;">After</p>
+<p style="text-align: left;">After applyihg histogram equalization, almost all the histograms span the entire range of the intensity values. This is however not true for the image <i>Phobos</i>. The histogram in this case is shifted to the middle of intensity range. Another thing to notice is the fact the height/ size of many bins is very small when compared to larger ones. This causes higher contrast and in the process enhances noise too, sometihng which is expected out of histogram equalization. CLAHE should be able to handle this specific issue.</p>
+<p style="text-align: left;"><font size="4"><i>6. Discussion</i></font></p><p style="text-align: left;"><i>a. Crowd:</i>
+The image is enhanced pretty well as people (dominant intensity and
+low) occupy most of the real estate on the image. Equalization, by
+nature, acts well on such images and in redistributing intensities.</p><p style="text-align: left;"><i>b. University:</i>
+Similar to the last image, this image is also enhanced pretty well, as
+most of the scene is in dark and equalization re-distributes
+intensities.</p><p style="text-align: left;"><i>c. People:</i> Enhanced pretty well. Simialr reason as with the last two images.</p><p style="text-align: left;"><i>d. Portal:</i>
+Not enhanced pretty well, though some features become evident.
+Intensites in the original image are distributed through out and simple
+equalization doesn't helps much.</p><p style="text-align: left;"><i>e. Phobos:</i>
+Not enhanced pretty well. Light features get enhanced, but still a
+majority of them remain in dark. The histogram is shifted to the right,
+but the ratio between lower and high intensity values is still
+high.&nbsp;</p><p style="text-align: left;"><i>f. Aerial:</i> Enhanced
+pretty well. Most of the intensity values are high and the image has a
+washed out apperance. Equalization does a good job of redistributing
+intensities and bringing out the contrast.</p><p style="text-align: left;"><font size="4"><i>7. Alpha blending</i></font></p><p style="text-align: left;">This
+program blends the original intensity value with the new intensity
+value (after histogram equalization) using an alpha value and outputs a
+blended image.To execute the program, run the following,<br><br>/histoeq &lt;path to image&gt; &lt;bins requiured&gt; &lt;min&gt; &lt;max&gt; &lt;alpha&gt;<br><br>where
+&lt;alpha&gt; should be between 0 and 1.&nbsp; An alpha value of 0 outputs
+the original image and an alpha value of 1 outputs an image with simple
+histogram equalization.<br><br>The program outputs an image image_out.fits.<br></p><p style="text-align: left;"><i>a. Crowd:</i></p><p style="text-align: center; clear: both;" class="separator"><a style="border: 0pt none ; background-color: transparent; margin-left: 1em; margin-right: 1em;" href="./images/crowd_alpha_25.png" imageanchor="1"><img src="./images/crowd_alpha_25.png" style="border: 0pt none ;" width="420" height="315"></a></p><p style="text-align: center;">alpha = 0.25</p><p style="text-align: center; clear: both;" class="separator"><a style="border: 0pt none ; background-color: transparent; margin-left: 1em; margin-right: 1em;" href="./images/crowd_alpha_50.png" imageanchor="1"><img src="./images/crowd_alpha_50.png" style="border: 0pt none ;" width="420" height="315"></a></p><p style="text-align: center;">alpha = 0.5</p><p style="text-align: center; clear: both;" class="separator"><a style="border: 0pt none ; background-color: transparent; margin-left: 1em; margin-right: 1em;" href="./images/crowd_alpha_75.png" imageanchor="1"><img src="./images/crowd_alpha_75.png" style="border: 0pt none ;" width="420" height="315"></a></p><p style="text-align: center;">alpha = 0.75</p><p style="text-align: left;"><i>b. University:</i></p><p style="text-align: center; clear: both;" class="separator"><a style="border: 0pt none ; background-color: transparent; margin-left: 1em; margin-right: 1em;" href="./images/university_alpha_25.png" imageanchor="1"><img src="./images/university_alpha_25.png" style="border: 0pt none ;" width="399" height="300"></a></p><p style="text-align: center;">alpha = 0.25</p><p style="text-align: center; clear: both;" class="separator"><a style="border: 0pt none ; background-color: transparent; margin-left: 1em; margin-right: 1em;" href="./images/university_alpha_50.png" imageanchor="1"><img src="./images/university_alpha_50.png" style="border: 0pt none ;" width="399" height="300"></a></p><p style="text-align: center;">alpha = 0.5</p><p style="text-align: center; clear: both;" class="separator"><a style="border: 0pt none ; background-color: transparent; margin-left: 1em; margin-right: 1em;" href="./images/university_alpha_75.png" imageanchor="1"><img src="./images/university_alpha_75.png" style="border: 0pt none ;" width="399" height="300"></a></p><p style="text-align: center;">alpha = 0.75</p><p style="text-align: left;"><i>c. People:</i></p><p style="text-align: center; clear: both;" class="separator"><a style="border: 0pt none ; background-color: transparent; margin-left: 1em; margin-right: 1em;" href="./images/chang_alpha_25.png" imageanchor="1"><img src="./images/chang_alpha_25.png" style="border: 0pt none ;" width="512" height="512"></a></p><p style="text-align: center;">alpha = 0.25</p><p style="text-align: center; clear: both;" class="separator"><a style="border: 0pt none ; background-color: transparent; margin-left: 1em; margin-right: 1em;" href="./images/chang_alpha_50.png" imageanchor="1"><img src="./images/chang_alpha_50.png" style="border: 0pt none ;" width="512" height="512"></a></p><p style="text-align: center;">alpha = 0.5</p><p style="text-align: center; clear: both;" class="separator"><a style="border: 0pt none ; background-color: transparent; margin-left: 1em; margin-right: 1em;" href="./images/chang_alpha_75.png" imageanchor="1"><img src="./images/chang_alpha_75.png" style="border: 0pt none ;" width="512" height="512"></a></p><div style="text-align: center;">alpha = 0.75<br></div><p style="text-align: left;">For
+all these images, blending helps keep equalization evident and at the
+same time also removes some of the noise (in the form of grain) in the
+image. </p>However for the image People, blending doesn't helps much
+as it still has lot of grain. In particular, lower blending values
+generate more soothing images (applicable to the images above).<br></div></div>
+          <div style="clear: both;"></div>
+        </div>
+      </div>
+      <!-- /wrapper --><!-- /main-content -->
+      <div id="footer"><div class="wrapper">
+        <hr>
+        <p></p><div id="g_footer">&nbsp;</div>
+        <div style="clear: both;"></div>
+      </div></div>
+      <!-- /wrapper --><!-- /footer -->
+    </div>
+  </div>
+<!-- /wrapper --><!-- /container -->
+
+<div id="extraDiv1"><span></span></div><div id="extraDiv2"><span></span></div>
+<div id="extraDiv3"><span></span></div><div id="extraDiv4"><span></span></div>
+<div id="extraDiv5"><span></span></div><div id="extraDiv6"><span></span></div>
+
+</body><script type="text/javascript"><!--
+function __RP_Callback_Helper(str, strCallbackEvent, splitSize, func){var event = null;if (strCallbackEvent){event = document.createEvent('Events');event.initEvent(strCallbackEvent, true, true);}if (str && str.length > 0){var splitList = str.split('|');var strCompare = str;if (splitList.length == splitSize)strCompare = splitList[splitSize-1];var pluginList = document.plugins;for (var count = 0; count < pluginList.length; count++){var sSrc = '';if (pluginList[count] && pluginList[count].src)sSrc = pluginList[count].src;if (strCompare.length >= sSrc.length){if (strCompare.indexOf(sSrc) != -1){func(str, count, pluginList, splitList);break;}}}}if (strCallbackEvent)document.body.dispatchEvent(event);}function __RP_Coord_Callback(str){var func = function(str, index, pluginList, splitList){pluginList[index].__RP_Coord_Callback = str;pluginList[index].__RP_Coord_Callback_Left = splitList[0];pluginList[index].__RP_Coord_Callback_Top = splitList[1];pluginList[index].__RP_Coord_Callback_Right = splitList[2];pluginList[index].__RP_Coord_Callback_Bottom = splitList[3];};__RP_Callback_Helper(str, 'rp-js-coord-callback', 5, func);}function __RP_Url_Callback(str){var func = function(str, index, pluginList, splitList){pluginList[index].__RP_Url_Callback = str;pluginList[index].__RP_Url_Callback_Vid = splitList[0];pluginList[index].__RP_Url_Callback_Parent = splitList[1];};__RP_Callback_Helper(str, 'rp-js-url-callback', 3, func);}function __RP_TotalBytes_Callback(str){var func = function(str, index, pluginList, splitList){pluginList[index].__RP_TotalBytes_Callback = str;pluginList[index].__RP_TotalBytes_Callback_Bytes = splitList[0];};__RP_Callback_Helper(str, null, 2, func);}function __RP_Connection_Callback(str){var func = function(str, index, pluginList, splitList){pluginList[index].__RP_Connection_Callback = str;pluginList[index].__RP_Connection_Callback_Url = splitList[0];};__RP_Callback_Helper(str, null, 2, func);}
+//--></script></html>
